@@ -83,7 +83,7 @@ ShaderProgram::ShaderProgram(const std::unordered_map<GLenum, std::string>& shad
       deleteProgram();
     }
 
-    SPDLOG_INFO(oss.str());
+    SPDLOG_DEBUG(oss.str());
   }
 
   GL::LinkProgram(m_Impl->m_Program);

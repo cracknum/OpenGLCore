@@ -30,6 +30,9 @@
 *.exe
 *.out
 *.app
-.vscode/launch.json
+
+# IDE
 /.vscode
 /build
+/.idea
+
