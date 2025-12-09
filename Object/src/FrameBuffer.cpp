@@ -1,6 +1,7 @@
 #include "FrameBuffer.h"
-#include <glad/glad.h>
 #include "GLFunctions.h"
+#include <glad/glad.h>
+#include <spdlog/spdlog.h>
 
 struct FrameBuffer::Impl
 {
@@ -11,6 +12,7 @@ struct FrameBuffer::Impl
 
   Impl(int width, int height)
     : m_FrameBuffer(0)
+    , m_Texture(0)
     , m_Width(width)
     , m_Height(height)
   {
@@ -23,7 +25,7 @@ FrameBuffer::FrameBuffer(int width, int height)
   createFrameBuffer();
 }
 
-FrameBuffer::~FrameBuffer() {}
+FrameBuffer::~FrameBuffer() = default;
 
 void FrameBuffer::bind() const {}
 
@@ -40,10 +42,54 @@ void FrameBuffer::createFrameBuffer()
     GL_UNSIGNED_BYTE, nullptr);
   GL::TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   GL::TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  GL::TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-  GL::TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  GL::TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  GL::FramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_Impl->m_Texture, 0);
+  GL::TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+  GL::TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+  float borderColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+  GL::TexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+  GL::FramebufferTexture2D(
+    GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_Impl->m_Texture, 0);
+
+  auto status = GL::CheckFramebufferStatus(GL_FRAMEBUFFER);
+  if (status != GL_FRAMEBUFFER_COMPLETE)
+  {
+    SPDLOG_DEBUG("Framebuffer is not complete! Error code: ");
+    switch (status)
+    {
+      case GL_FRAMEBUFFER_UNDEFINED:
+        SPDLOG_DEBUG("GL_FRAMEBUFFER_UNDEFINED");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+        SPDLOG_DEBUG("GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+        SPDLOG_DEBUG("GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+        SPDLOG_DEBUG("GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+        SPDLOG_DEBUG("GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER");
+        break;
+      case GL_FRAMEBUFFER_UNSUPPORTED:
+        SPDLOG_DEBUG("GL_FRAMEBUFFER_UNSUPPORTED");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+        SPDLOG_DEBUG("GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE");
+        break;
+      case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+        SPDLOG_DEBUG("GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS");
+        break;
+      default:
+        SPDLOG_DEBUG("Unknown error ({})", status);
+        break;
+    }
+  }
+  else
+  {
+    SPDLOG_DEBUG("complete create FrameBuffer");
+  }
+
+  GL::BindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void FrameBuffer::updateBufferSize(int width, int height)
