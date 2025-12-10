@@ -61,7 +61,7 @@ ShaderProgram::ShaderProgram(const std::unordered_map<GLenum, std::string>& shad
         GL::GetShaderiv(shader, GL_INFO_LOG_LENGTH, &logLength);
         if (logLength > 1)
         {
-          std::vector<GLchar> log;
+          std::vector<GLchar> log(logLength);
           GL::GetShaderInfoLog(shader, logLength, nullptr, log.data());
           oss << "compile error: " << log.data();
         }
