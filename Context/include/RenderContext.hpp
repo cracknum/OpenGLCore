@@ -18,6 +18,7 @@ public:
     return true;
   }
 
+  virtual void resize(int width, int height) = 0;
   virtual void preRender() = 0;
   virtual void postRender() = 0;
   virtual void end() = 0;

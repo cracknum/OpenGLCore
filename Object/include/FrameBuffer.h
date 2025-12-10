@@ -11,6 +11,9 @@ public:
 
   void bind() const;
   void unbind() const;
+  unsigned int texture() const;
+  int textureWidth() const;
+  int textureHeight() const;
 
   void updateBufferSize(int width, int height);
   void deleteBuffer();

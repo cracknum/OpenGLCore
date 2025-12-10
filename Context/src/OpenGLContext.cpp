@@ -5,32 +5,38 @@
 // clang-format on
 #include <iostream>
 
-namespace {
-static void on_window_size_callback(GLFWwindow *window, int width, int height) {
-  auto pWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
+namespace
+{
+static void on_window_size_callback(GLFWwindow* window, int width, int height)
+{
+  auto pWindow = static_cast<IWindow*>(glfwGetWindowUserPointer(window));
   pWindow->onResize(width, height);
 }
 
-static void on_window_close_callback(GLFWwindow *window) {
-  IWindow *pWindow = static_cast<IWindow *>(glfwGetWindowUserPointer(window));
+static void on_window_close_callback(GLFWwindow* window)
+{
+  IWindow* pWindow = static_cast<IWindow*>(glfwGetWindowUserPointer(window));
   pWindow->close();
 }
 } // namespace
-bool OpenGLContext::init(IWindow *window) {
+bool OpenGLContext::init(IWindow* window)
+{
   superclass::init(window);
   /* Initialize the library */
-  if (!glfwInit()) {
+  if (!glfwInit())
+  {
     fprintf(stderr, "Error: GLFW Window couldn't be initialized\n");
     return false;
   }
 
   // Create the window and store this window as window pointer
   // so that we can use it in callback functions
-  auto glWindow = glfwCreateWindow(window->mWidth, window->mHeight,
-                                   window->mTitle.c_str(), nullptr, nullptr);
+  auto glWindow =
+    glfwCreateWindow(window->mWidth, window->mHeight, window->mTitle.c_str(), nullptr, nullptr);
   window->setNativeWindow(glWindow);
 
-  if (!glWindow) {
+  if (!glWindow)
+  {
     fprintf(stderr, "Error: GLFW Window couldn't be created\n");
     return false;
   }
@@ -40,7 +46,8 @@ bool OpenGLContext::init(IWindow *window) {
   glfwSetWindowCloseCallback(glWindow, on_window_close_callback);
   glfwMakeContextCurrent(glWindow);
 
-  if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
+  if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
+  {
     /* Problem: glewInit failed, something is seriously wrong. */
     fprintf(stderr, "Error: %u\n", glad_glGetError());
     return false;
@@ -51,18 +58,49 @@ bool OpenGLContext::init(IWindow *window) {
   return true;
 }
 
-void OpenGLContext::preRender() {
+void OpenGLContext::preRender()
+{
   glViewport(0, 0, mWindow->mWidth, mWindow->mHeight);
   glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void OpenGLContext::postRender() {
+void OpenGLContext::postRender()
+{
   glfwPollEvents();
-  glfwSwapBuffers((GLFWwindow *)mWindow->getNativeWindow());
+  glfwSwapBuffers((GLFWwindow*)mWindow->getNativeWindow());
 }
 
-void OpenGLContext::end() {
-  glfwDestroyWindow((GLFWwindow *)mWindow->getNativeWindow());
+void OpenGLContext::resize(int width, int height)
+{
+  glfwSetWindowSize((GLFWwindow*)mWindow->getNativeWindow(), width, height);
+}
+
+void OpenGLContext::maximum()
+{
+  glfwMaximizeWindow((GLFWwindow*)mWindow->getNativeWindow());
+  int width, height;
+  glfwGetWindowSize((GLFWwindow*)mWindow->getNativeWindow(), &width, &height);
+  mWindow->mWidth = width;
+  mWindow->mHeight = height;
+}
+
+void OpenGLContext::fullScreen()
+{
+  int width = 0;
+  int height = 0;
+  int wx = 0, wy = 0;
+  auto monitor = glfwGetPrimaryMonitor();
+  glfwGetMonitorWorkarea(monitor, &wx, &wy, &width, &height);
+  glfwSetWindowPos((GLFWwindow*)mWindow->getNativeWindow(), wx, wy);
+
+  mWindow->mWidth = width;
+  mWindow->mHeight = height;
+  glfwSetWindowSize((GLFWwindow*)mWindow->getNativeWindow(), width, height);
+}
+
+void OpenGLContext::end()
+{
+  glfwDestroyWindow((GLFWwindow*)mWindow->getNativeWindow());
   glfwTerminate();
 }

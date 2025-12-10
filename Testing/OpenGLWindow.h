@@ -1,8 +1,9 @@
 #ifndef OPENGL_WINDOW_H
 #define OPENGL_WINDOW_H
 #include "IWindow.hpp"
-#include <string>
 #include <memory>
+#include <string>
+
 
 class OpenGLWindow : public IWindow
 {
@@ -15,8 +16,12 @@ public:
   void onResize(int width, int height) override;
   void close() override;
   void setWindowIcon(const std::string& iconPath) override;
+  void resize(int width, int height) override;
+  void fullScreen() override;
+  void maximum() override;
+  void exit() override;
 
-  private:
+private:
   struct WindowPrivate;
   std::unique_ptr<WindowPrivate> mPrivate;
 };
