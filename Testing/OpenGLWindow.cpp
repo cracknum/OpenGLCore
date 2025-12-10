@@ -55,3 +55,7 @@ void OpenGLWindow::close()
 }
 
 void OpenGLWindow::setWindowIcon(const std::string& iconPath) {}
+void OpenGLWindow::resize(int width, int height) {}
+void OpenGLWindow::fullScreen() {}
+void OpenGLWindow::maximum() {}
+void OpenGLWindow::exit(){}

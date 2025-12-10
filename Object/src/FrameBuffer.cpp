@@ -31,6 +31,21 @@ void FrameBuffer::bind() const {}
 
 void FrameBuffer::unbind() const {}
 
+unsigned int FrameBuffer::texture() const
+{
+    return m_Impl->m_Texture;
+}
+
+int FrameBuffer::textureWidth() const
+{
+    return m_Impl->m_Width;
+}
+
+int FrameBuffer::textureHeight() const
+{
+    return m_Impl->m_Height;
+}
+
 void FrameBuffer::createFrameBuffer()
 {
   GL::GenFramebuffers(1, &m_Impl->m_FrameBuffer);
