@@ -27,9 +27,15 @@ FrameBuffer::FrameBuffer(int width, int height)
 
 FrameBuffer::~FrameBuffer() = default;
 
-void FrameBuffer::bind() const {}
+void FrameBuffer::bind() const
+{
+  GL::BindFramebuffer(GL_FRAMEBUFFER, m_Impl->m_FrameBuffer);
+}
 
-void FrameBuffer::unbind() const {}
+void FrameBuffer::unbind() const
+{
+  GL::BindFramebuffer(GL_FRAMEBUFFER, 0);
+}
 
 unsigned int FrameBuffer::texture() const
 {
@@ -112,6 +118,8 @@ void FrameBuffer::updateBufferSize(int width, int height)
   if (width != m_Impl->m_Width || height != m_Impl->m_Height)
   {
     deleteBuffer();
+    m_Impl->m_Width = width;
+    m_Impl->m_Height = height;
     createFrameBuffer();
   }
 }
