@@ -21,7 +21,7 @@ include(cmake/ExportFunction.cmake)
 include(cmake/files_group.cmake)
 include(cmake/resource_copy.cmake)
 # for spdlog print debug info
-set(ENABLE_DEBUG ON)
+set(ENABLE_DEBUG OFF)
 
 if (ENABLE_DEBUG)
     add_definitions(-DSPDLOG_ACTIVE_LEVEL=1)
