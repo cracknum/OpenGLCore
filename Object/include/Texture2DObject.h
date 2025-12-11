@@ -17,7 +17,7 @@ public:
   int width() const;
   int height() const;
 
-  void uploadTexture(const char* textureData);
+  void uploadTexture(const float* textureData);
 
   void updateBufferSize(int width, int height);
   void deleteBuffer();

@@ -45,11 +45,11 @@ int Texture2DObject::height() const
   return mPrivate->mHeight;
 }
 
-void Texture2DObject::uploadTexture(const char* textureData)
+void Texture2DObject::uploadTexture(const float* textureData)
 {
   GL::BindTexture(GL_TEXTURE_2D, mPrivate->mTexture);
-  GL::TexImage2D(GL_TEXTURE_2D, 0, GL_R8, mPrivate->mWidth, mPrivate->mHeight, 0, GL_RED,
-    GL_UNSIGNED_BYTE, static_cast<const void*>(textureData));
+  GL::TexImage2D(GL_TEXTURE_2D, 0, GL_R32F, mPrivate->mWidth, mPrivate->mHeight, 0, GL_RED,
+    GL_FLOAT, static_cast<const void*>(textureData));
   GL::BindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -81,7 +81,7 @@ void Texture2DObject::createTexture()
   GL::TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
   GL::TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
   GL::TexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, mPrivate->mBorderColor);
-  GL::TexImage2D(GL_TEXTURE_2D, 0, GL_R8, mPrivate->mWidth, mPrivate->mHeight, 0, GL_RED,
-    GL_UNSIGNED_BYTE, nullptr);
+  GL::TexImage2D(
+    GL_TEXTURE_2D, 0, GL_R32F, mPrivate->mWidth, mPrivate->mHeight, 0, GL_RED, GL_FLOAT, nullptr);
   GL::BindTexture(GL_TEXTURE_2D, 0);
 }
