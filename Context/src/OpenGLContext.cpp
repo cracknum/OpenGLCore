@@ -42,7 +42,7 @@ bool OpenGLContext::init(IWindow* window)
   }
 
   glfwSetWindowUserPointer(glWindow, window);
-  glfwSetWindowSizeCallback(glWindow, on_window_size_callback);
+  glfwSetFramebufferSizeCallback(glWindow, on_window_size_callback);
   glfwSetWindowCloseCallback(glWindow, on_window_close_callback);
   glfwMakeContextCurrent(glWindow);
 
