@@ -2,6 +2,7 @@
 #define VERTICES_OPENGL_H
 #include <array>
 #include <utility>
+#include <glad/glad.h>
 #include "ObjectExport.h"
 struct OBJECT_API Vertices
 {
