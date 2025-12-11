@@ -329,6 +329,11 @@ void DeleteTextures(GLsizei n, const GLuint* textures)
   glDeleteTextures(n, textures);
 }
 
+void ActiveTexture(GLenum texture)
+{
+	glActiveTexture(texture);
+}
+
 void BindFramebuffer(GLenum target, GLuint framebuffer)
 {
   glBindFramebuffer(target, framebuffer);

@@ -106,6 +106,7 @@ CONTEXT_API void GenTextures(GLsizei n, GLuint* textures);
 CONTEXT_API void DeleteTextures(GLsizei n, const GLuint* textures);
 CONTEXT_API void BindFramebuffer(GLenum target, GLuint framebuffer);
 CONTEXT_API void BindTexture(GLenum target, GLuint texture);
+CONTEXT_API void ActiveTexture(GLenum texture);
 CONTEXT_API GLenum CheckFramebufferStatus(GLenum target);
 
 CONTEXT_API void FramebufferTexture2D(
