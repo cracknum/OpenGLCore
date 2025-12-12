@@ -16,6 +16,7 @@ public:
   void unbind() const;
   int width() const;
   int height() const;
+  GLuint textureId() const;
 
   void uploadTexture(const float* textureData);
 

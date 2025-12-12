@@ -45,6 +45,11 @@ int Texture2DObject::height() const
   return mPrivate->mHeight;
 }
 
+GLuint Texture2DObject::textureId() const
+{
+  return mPrivate->mTexture;
+}
+
 void Texture2DObject::uploadTexture(const float* textureData)
 {
   GL::BindTexture(GL_TEXTURE_2D, mPrivate->mTexture);
