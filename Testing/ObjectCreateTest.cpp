@@ -82,7 +82,7 @@ TEST_F(CoreTest, VerticeCreate)
 TEST_F(CoreTest, Texture2DCreateTest)
 {
 	auto textureObject = std::make_shared<Texture2DObject>(1920, 1080);
-	char data[1920*1080] = {};
+	float data[1920*1080] = {};
 	textureObject->uploadTexture(data);
 	textureObject->updateBufferSize(800, 800);
 	textureObject->uploadTexture(data);
